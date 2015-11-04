@@ -10,25 +10,20 @@ using System.Windows.Media.Imaging;
 
 namespace SnakeProject
 {
-    class SnakeBody : Image
+    class Bug : Image
     {
-        public SnakeBody()
+        Random R = new Random();
+        public Bug()
         {
             this.Height = 10;
             this.Width = 10;
             this.Source = new BitmapImage(new Uri(@"pack://application:,,,/"
               + Assembly.GetExecutingAssembly().GetName().Name
               + ";component/"
-              + "Body.png", UriKind.Absolute));
-            this.Margin = new Thickness(50, 150, 0, 0);
+              + "Bug.png", UriKind.Absolute));
+            this.Margin = new Thickness(R.Next(1, 50)*10, R.Next(1, 50) * 10, 0, 0);
             this.HorizontalAlignment = HorizontalAlignment.Left;
             this.VerticalAlignment = VerticalAlignment.Top;
-        }
-
-        public SnakeBody(Thickness newMargin) 
-            : this()
-        {
-            this.Margin = newMargin;
         }
     }
 }
