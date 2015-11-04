@@ -21,7 +21,6 @@ namespace SnakeProject
     {
         DispatcherTimer timer;
         Snake snake;
-        SnakeBody body;
         public MainWindow()
         {
             InitializeComponent();
@@ -29,11 +28,16 @@ namespace SnakeProject
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMilliseconds(100);
             timer.Tick += Timer_Tick;
-            body = new SnakeBody();
-            snake = new Snake(body);
-            Grid1.Children.Add(snake[0]);
+            snake = new Snake(new SnakeBody());
+            snake.Allunga(new SnakeBody(new Thickness(40, 150, 0, 0)));
+            snake.Allunga(new SnakeBody(new Thickness(30, 150, 0, 0)));
+            snake.Allunga(new SnakeBody(new Thickness(20, 150, 0, 0)));
+            MainGrid.Children.Add(snake[0]);
+            MainGrid.Children.Add(snake[1]);
+            MainGrid.Children.Add(snake[2]);
+            MainGrid.Children.Add(snake[3]);
 
-            this.KeyUp += new KeyEventHandler(OnButtonKeyDown);
+            this.KeyDown += new KeyEventHandler(OnButtonKeyDown);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -51,19 +55,19 @@ namespace SnakeProject
             switch (e.Key)
             {
                 case Key.Down:
-                    if (snake.Direction != 0)
+                    if (snake.Direction != 0 && snake.Direction != 1)
                         snake.Direction = 0;
                     break;
                 case Key.Up:
-                    if (snake.Direction != 1)
+                    if (snake.Direction != 0 && snake.Direction != 1)
                         snake.Direction = 1;
                     break;
                 case Key.Left:
-                    if (snake.Direction != 2)
+                    if (snake.Direction != 2 && snake.Direction != 3)
                         snake.Direction = 2;
                     break;
                 case Key.Right:
-                    if (snake.Direction != 3)
+                    if (snake.Direction != 2 && snake.Direction != 3)
                         snake.Direction = 3;
                     break;
             }

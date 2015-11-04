@@ -55,8 +55,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Classes\Snake.cs" />
-    <Compile Include="Classes\SnakeBody.cs" />
+    <Compile Include="Package\Snake.cs" />
+    <Compile Include="Package\SnakeBody.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

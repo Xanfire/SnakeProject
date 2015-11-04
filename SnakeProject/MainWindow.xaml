@@ -8,5 +8,5 @@
         WindowStartupLocation="CenterScreen" 
         Width="1024" Height="768"
         Title="Snake" Loaded="Window_Loaded">
-    <Grid x:Name="Grid1" Background="Black" Width="900" Height="650" />
+    <Grid x:Name="MainGrid" Background="Black" Width="900" Height="650" />
 </Window>
