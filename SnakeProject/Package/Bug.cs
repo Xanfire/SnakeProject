@@ -12,7 +12,7 @@ namespace SnakeProject
 {
     class Bug : Image
     {
-        Random R = new Random();
+        Random R;
         public Bug()
         {
             this.Height = 10;
@@ -21,6 +21,7 @@ namespace SnakeProject
               + Assembly.GetExecutingAssembly().GetName().Name
               + ";component/"
               + "Bug.png", UriKind.Absolute));
+            this.R = new Random();
             this.Margin = new Thickness(R.Next(1, 50)*10, R.Next(1, 50) * 10, 0, 0);
             this.HorizontalAlignment = HorizontalAlignment.Left;
             this.VerticalAlignment = VerticalAlignment.Top;

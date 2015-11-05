@@ -30,39 +30,33 @@ namespace SnakeProject
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMilliseconds(100);
             timer.Tick += Timer_Tick;
-            snake = new Snake(new SnakeBody());
-            snake.Allunga(new SnakeBody(new Thickness(40, 150, 0, 0)));
-            snake.Allunga(new SnakeBody(new Thickness(30, 150, 0, 0)));
-            snake.Allunga(new SnakeBody(new Thickness(20, 150, 0, 0)));
-            bug = new Bug();
-            MainGrid.Children.Add(snake[0]);
-            MainGrid.Children.Add(snake[1]);
-            MainGrid.Children.Add(snake[2]);
-            MainGrid.Children.Add(snake[3]);
-            MainGrid.Children.Add(bug);
 
-            this.KeyDown += new KeyEventHandler(OnButtonKeyDown);
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            timer.Start();
+            this.InitSnake();            
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
             snake.Move();
-            if (Collision())
+            BodyCollisionControl();
+            if (EatControl())
             {
+                //E' necessario per far si che non venga creato un nuovo insetto
+                //sopra al precedente
                 Thickness xPoint = bug.Margin;
-                MainGrid.Children.Remove(bug);
-                snake.Allunga(new SnakeBody(snake.Scarto));               
-                MainGrid.Children.Add(snake[snake.Count - 1]);
+
+                SnakeGrid.Children.Remove(bug);
+
+                snake.Stretch();            
+                SnakeGrid.Children.Add(snake[snake.Count - 1]);
+
                 {                 
                     bug = new Bug();                       
-                } while (Collision() && bug.Margin == xPoint);
-                MainGrid.Children.Add(bug);
+                } while (EatControl() && bug.Margin == xPoint);
+
+                SnakeGrid.Children.Add(bug);
+                Score.Content = "Score: " + snake.Score;
             }
+
             keyEnable = true;
         }
 
@@ -93,7 +87,22 @@ namespace SnakeProject
             keyEnable = false;
         }
 
-        public bool Collision()
+        private void BodyCollisionControl()
+        {
+            for (int i = 1; i < snake.Count; i++)
+            {
+                if (snake[0].Margin == snake[i].Margin)
+                {
+                    GameOver();
+                }
+            }
+            if (snake[0].Margin.Top > 590 || snake[0].Margin.Top < 0 
+                || snake[0].Margin.Left < 0 || snake[0].Margin.Left > 590)
+            {
+                GameOver();
+            }
+        }
+        private bool EatControl()
         {
             foreach (SnakeBody body in snake)
             {
@@ -103,6 +112,38 @@ namespace SnakeProject
                 }
             }
             return false;
+        }
+
+        private void InitSnake()
+        {
+            snake = new Snake();
+            for(int i = 0; i < snake.Count; i++)
+            {
+                SnakeGrid.Children.Add(snake[i]);
+            }
+            bug = new Bug();
+            SnakeGrid.Children.Add(bug);
+            Score.Content = "Score: 0";
+        }
+
+        private void NewGame_Click(object sender, RoutedEventArgs e)
+        {
+            timer.Start();
+            this.KeyDown += new KeyEventHandler(OnButtonKeyDown);
+            NewGame.IsEnabled = false;
+        }
+
+        private void GameOver()
+        {
+            MessageBox.Show("Game Over \n Score: " + snake.Score);
+            timer.Stop();
+            foreach (SnakeBody body in snake)
+            {
+                SnakeGrid.Children.Remove(body);
+            }
+            SnakeGrid.Children.Remove(bug);
+            InitSnake();
+            NewGame.IsEnabled = true;
         }
     }
 }
